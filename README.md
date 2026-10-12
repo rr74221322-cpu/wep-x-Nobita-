@@ -1,2 +1,1 @@
-# wep-x-Nobita-
-web pair v1
+# X-NOBITA-XD-
