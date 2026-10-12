@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b0813"><title>www.xnobitaxdofficial.pair | X NOBITA XD</title>
+<style>
+:root{color-scheme:dark;--bg:#0b0813;--panel:#171222;--muted:#b5a8c8;--purple:#c084fc;--line:#352743}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#29143b 0,var(--bg) 52%);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:#fff;display:flex;justify-content:center;padding:26px 15px}
+main{width:min(100%,520px)}header{text-align:center;padding:14px 0 24px}.logo{width:72px;height:72px;border-radius:23px;margin:auto auto 13px;display:grid;place-items:center;background:linear-gradient(135deg,#a855f7,#4c1d95);font-size:31px;box-shadow:0 8px 35px #9333ea44}h1{font-size:25px;margin:0;letter-spacing:.4px}header p{margin:8px 0;color:var(--muted);font-size:13px}.badge{display:inline-flex;align-items:center;gap:7px;background:#123528;color:#86efac;border:1px solid #205c43;padding:7px 12px;border-radius:999px;font-size:12px;margin-top:10px}.dot{width:7px;height:7px;background:#4ade80;border-radius:50%}.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}.card{background:#171222dd;border:1px solid var(--line);border-radius:18px;padding:17px;min-width:0}.label{font-size:11px;letter-spacing:1px;color:var(--muted);text-transform:uppercase}.value{font-size:21px;font-weight:750;margin-top:9px;overflow-wrap:anywhere}.accent{color:#86efac}.icon{font-size:20px;margin-bottom:13px}.pair{margin-top:15px}.pair h2{font-size:18px;margin:0 0 8px}.pair p{font-size:13px;color:var(--muted);line-height:1.5}.field{display:flex;gap:8px;margin-top:16px}.field input{flex:1;min-width:0;background:#0d0a14;border:1px solid #4b365f;color:white;padding:14px 13px;border-radius:12px;font-size:15px;outline:none}.field input:focus{border-color:var(--purple)}button{border:0;border-radius:12px;padding:0 17px;background:linear-gradient(135deg,#c084fc,#9333ea);color:white;font-weight:750;font-size:13px;cursor:pointer}button:disabled{opacity:.55;cursor:wait}.result{display:none;margin-top:15px;background:#0d0a14;border:1px solid #4b365f;border-radius:12px;padding:15px;overflow-wrap:anywhere}.result.show{display:block}.code{font-size:25px;letter-spacing:2px;font-weight:800;color:#e9d5ff;margin:8px 0}.small{font-size:12px;color:var(--muted);line-height:1.5}footer{text-align:center;color:#877a98;font-size:11px;padding:22px 0 6px}@media(max-width:370px){.field{flex-direction:column}.field button{padding:14px}}
+</style>
+</head>
+<body><main>
+<header><div class="logo">✦</div><h1>XNOBITA XD</h1><p>www.xnobitaxdofficial.pair · WhatsApp MD</p><div class="badge" id="statusBadge"><span class="dot"></span><span id="statusText">CHECKING STATUS</span></div></header>
+<section class="stats">
+<div class="card"><div class="icon">◉</div><div class="label">Bot Status</div><div class="value accent" id="botStatus">Checking…</div></div>
+<div class="card"><div class="icon">◷</div><div class="label">Uptime</div><div class="value" id="uptime">--</div></div>
+<div class="card"><div class="icon">▣</div><div class="label">Active Sessions</div><div class="value" id="sessions">0</div></div>
+<div class="card"><div class="icon">♧</div><div class="label">Total Pair</div><div class="value" id="totalPair">0</div></div>
+</section>
+<section class="card pair"><h2>📱 Connect WhatsApp</h2><p>Enter your WhatsApp number with country code, then tap OK to generate a pairing code.</p>
+<form id="pairForm"><div class="field"><input id="phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="Example: 919876543210" minlength="8" maxlength="16" required><button id="submit" type="submit">OK · PAIR</button></div></form>
+<div class="result" id="result" role="status" aria-live="polite"></div>
+<p class="small">Open WhatsApp → Linked devices → Link a device → Link with phone number, then enter the code. Never share your pairing code.</p></section>
+<footer>NO LOGIN · NO REGISTER · X NOBITA XD</footer>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+function duration(s){s=Math.max(0,Math.floor(s||0));const d=Math.floor(s/86400),h=Math.floor(s%86400/3600),m=Math.floor(s%3600/60);return `${d}d ${h}h ${m}m`}
+async function refresh(){try{const r=await fetch('/api/status',{cache:'no-store'});const d=await r.json();$('botStatus').textContent=d.running?'Running':'Offline';$('botStatus').className='value '+(d.running?'accent':'');$('statusText').textContent=d.running?'BOT RUNNING':'BOT OFFLINE';$('uptime').textContent=duration(d.uptime);$('sessions').textContent=d.activeSessions??0;$('totalPair').textContent=d.totalPair??0;}catch{$('botStatus').textContent='Offline';$('statusText').textContent='SERVER UNAVAILABLE'}}refresh();setInterval(refresh,10000);
+$('pairForm').addEventListener('submit',async e=>{e.preventDefault();const phone=$('phone').value.replace(/\D/g,'');const b=$('submit'),r=$('result');r.className='result show';r.textContent='Generating pairing code… Please wait.';b.disabled=true;try{const res=await fetch('/api/pair',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone})});const d=await res.json();if(!res.ok)throw new Error(d.error||'Could not generate pairing code');r.innerHTML='Your WhatsApp pairing code<div class="code"></div><div class="small">Use this code in WhatsApp Linked devices. Keep it private.</div>';r.querySelector('.code').textContent=d.code;refresh()}catch(err){r.textContent=err.message||'Pairing failed. Please try again.'}finally{b.disabled=false}});
+</script></body></html>
